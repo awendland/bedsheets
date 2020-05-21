@@ -1,0 +1,33 @@
+{
+  "name": "bedsheets",
+  "version": "0.1.0",
+  "description": "Turn Google Sheets into a quick & dirty RESTful DB",
+  "repository": "github.com/awendland/bedsheets",
+  "author": "Alex Wendland <me@alexwendland.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "prettier": "prettier --write ."
+  },
+  "dependencies": {
+    "googleapis": "^51.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.4",
+    "ava": "^3.8.2",
+    "prettier": "^2.0.5",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.3"
+  },
+  "keywords": [
+    "google",
+    "sheets",
+    "spreadsheet",
+    "serverless",
+    "faas",
+    "rest",
+    "database",
+    "db"
+  ]
+}
