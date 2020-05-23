@@ -7,7 +7,7 @@ export const HEADER_SIZE = 1
 export const MAX_ROW_COUNT = 210_000_000 // roughly the max row size that'll parse
 
 export type Nullish<T> = T | null | undefined
-export type SheetRow = (string | number)[] // FIXME can a number be returned?
+export type SheetRow = (string | number)[] // TODO can a number be returned?
 
 export class RedactedError<I extends {}, E extends Error> extends Error {
   constructor(
@@ -41,26 +41,26 @@ export async function head(
   {
     spreadsheetId,
     sheet,
-    limit,
-    offset = 0,
   }: {
     spreadsheetId: string
     sheet: string
     limit?: number
     offset?: number
   }
-): Promise<Array<{}>> {
+): Promise<Array<string>> {
   const _enforceKnownHeaderSize: 1 = HEADER_SIZE // this will error if HEADER_SIZE is changed to an unacceptable value
   const resp = await client.spreadsheets.values.get({
     spreadsheetId,
-    range: `${sheet}!1:${HEADER_SIZE}`, // TODO only pull minimum set of data required
+    range: `${sheet}!1:${HEADER_SIZE}`,
   })
-  console.time("HEAD processing")
-  if (!resp.data.values) throw new Error("TODO unconfigured sheet")
-  const header = resp.data.values[0]
+  if (!resp.data.values)
+    throw new MisconfiguredSheetError({
+      sheet,
+      reason: MisconfigurationReason.NoHeaders,
+    })
+  const headers = resp.data.values[0]
   // TODO figure out guestimated type of data by first row
-  console.timeEnd("HEAD processing")
-  return header
+  return headers
 }
 
 async function _get(

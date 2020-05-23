@@ -10,8 +10,8 @@
     "build:watch": "tsc --watch",
     "clean": "shx rm -rf build/",
     "prettier": "prettier --write .",
-    "test:all": "yarn test:unit && yarn test:e2e",
-    "test:e2e": "ava --serial build/tests/e2e/**",
+    "test:all": "yarn test:unit && yarn test:integration",
+    "test:integration": "ava --serial build/tests/integration/**",
     "test:unit": "ava build/tests/unit/**"
   },
   "dependencies": {
