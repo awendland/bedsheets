@@ -1,5 +1,14 @@
 # \[WIP\] Bedsheets
 
+## Comparison to Traditional DBs
+
+### Terminology
+
+| Bedsheets      | Postgres                                                                                  | Description                        |
+| -------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
+| Spreadsheet ID | [Database Name / dbname](https://www.postgresql.org/docs/9.2/libpq-connect.html#AEN38680) | The instance/server being accessed |
+| Sheet          | Table                                                                                     | The model/entity being retrieved   |
+
 ## FAQ
 
 ### I'm getting a 403 error when trying to access my sheet

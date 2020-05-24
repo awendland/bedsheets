@@ -11,8 +11,8 @@
     "clean": "shx rm -rf build/",
     "prettier": "prettier --write .",
     "test:all": "yarn test:unit && yarn test:integration",
-    "test:integration": "ava --serial build/tests/integration/**",
-    "test:unit": "ava build/tests/unit/**"
+    "test:integration": "ava --serial build/tests/integration/**/*",
+    "test:unit": "ava build/tests/unit/**/*"
   },
   "dependencies": {
     "googleapis": "^51.0.0"
