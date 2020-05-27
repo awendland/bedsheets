@@ -39,7 +39,7 @@ import {
  * @param options.spreadsheetId ID of the spreadsheet being accessed
  * @param options.sheetName Name of the Sheet (i.e. tab) in the spreadsheet to retrieve
  */
-export const head = redactErrors(async function _head(
+export const describe = redactErrors(async function _describe(
   client: sheets_v4.Sheets,
   {
     spreadsheetId,
@@ -228,7 +228,7 @@ export const append = redactErrors(async function _append<T extends {}>(
   }
 ): Promise<{ updatedRange: A1Notation; updatedRowCount: number }> {
   const sheet = SheetName(sheetName)
-  const { headers } = await head(client, { spreadsheetId, sheetName })
+  const { headers } = await describe(client, { spreadsheetId, sheetName })
 
   if (strict && new Set(headers).size !== headers.length)
     throw new MisconfiguredSheetError({

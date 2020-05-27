@@ -1,6 +1,6 @@
 import test from "ava"
-import { rowMajor2DFromObjects } from "../../src/rest-sheets/utils"
-import { Headers } from "../../src/rest-sheets"
+import { rowMajor2DFromObjects } from "../../../src/google-sheets-model/utils"
+import { Headers } from "../../../src/google-sheets-model"
 
 test("rowMajor2DFromObjects - no objects, not strict", async (t) => {
   t.deepEqual(

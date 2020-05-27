@@ -11,17 +11,25 @@
     "clean": "shx rm -rf build/",
     "prettier": "prettier --write .",
     "test:all": "yarn test:unit && yarn test:integration",
+    "test:all:coverage": "nyc yarn test:all",
     "test:integration": "ava --serial build/tests/integration/**/*",
     "test:unit": "ava build/tests/unit/**/*"
+  },
+  "engines": {
+    "node": ">=12",
+    "yarn": "1.x"
   },
   "dependencies": {
     "googleapis": "^51.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.4",
+    "@types/supertest": "^2.0.9",
     "ava": "^3.8.2",
+    "nyc": "^15.0.1",
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
+    "supertest": "^4.0.2",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.3"
   },

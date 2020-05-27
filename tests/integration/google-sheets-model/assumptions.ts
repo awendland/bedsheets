@@ -1,6 +1,9 @@
 import anyTest from "ava"
-import { setupIntegrationTest } from "./_common"
-import { FormattedSheetRow, MAX_ROW_COUNT } from "../../../src/rest-sheets"
+import { setupIntegrationTest } from "../_common"
+import {
+  FormattedSheetRow,
+  MAX_ROW_COUNT,
+} from "../../../src/google-sheets-model"
 
 const TEST_SHEETS = {
   Sheet1: {

@@ -1,9 +1,9 @@
 import anyTest from "ava"
 
-import * as RESTSheets from "../../../src/rest-sheets"
-import { objectsFromRowMajor2D } from "../../../src/rest-sheets/utils"
-import { setupIntegrationTest } from "./_common"
-import { SheetName } from "../../../src/rest-sheets"
+import * as SheetsDAL from "../../../src/google-sheets-model"
+import { objectsFromRowMajor2D } from "../../../src/google-sheets-model/utils"
+import { setupIntegrationTest } from "../_common"
+import { SheetName } from "../../../src/google-sheets-model"
 
 const TEST_SHEETS = {
   Sheet1: {
@@ -34,7 +34,7 @@ const test = setupIntegrationTest(anyTest, { seedSheets: TEST_SHEETS })
 ///////////////////
 
 test("get - Sheet1 - happy path", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
   })
@@ -52,7 +52,7 @@ test("get - Sheet1 - happy path", async (t) => {
 //////////////////////
 
 test("get - Sheet1 - offset=null, limit=1", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     limit: 1,
@@ -67,7 +67,7 @@ test("get - Sheet1 - offset=null, limit=1", async (t) => {
 })
 
 test("get - Sheet1 - offset=null, limit=0", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     limit: 0,
@@ -76,7 +76,7 @@ test("get - Sheet1 - offset=null, limit=0", async (t) => {
 })
 
 test("get - Sheet1 - offset=0, limit=null", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 0,
@@ -91,7 +91,7 @@ test("get - Sheet1 - offset=0, limit=null", async (t) => {
 })
 
 test("get - Sheet1 - offset=0, limit=0", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 0,
@@ -101,7 +101,7 @@ test("get - Sheet1 - offset=0, limit=0", async (t) => {
 })
 
 test("get - Sheet1 - offset=1, limit=null", async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 1,
@@ -118,7 +118,7 @@ test("get - Sheet1 - offset=1, limit=null", async (t) => {
 {
   const offset = TEST_SHEETS.Sheet2.values.length - 2
   test(`get - Sheet2 - offset=${offset}, limit=1`, async (t) => {
-    const resp = await RESTSheets.get(t.context.sheetsApi, {
+    const resp = await SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet2.title,
       offset,
@@ -134,7 +134,7 @@ test("get - Sheet1 - offset=1, limit=null", async (t) => {
   })
 
   test(`get - Sheet2 - offset=${offset}, limit=null`, async (t) => {
-    const resp = await RESTSheets.get(t.context.sheetsApi, {
+    const resp = await SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet2.title,
       offset,
@@ -149,7 +149,7 @@ test("get - Sheet1 - offset=1, limit=null", async (t) => {
   })
 
   test(`get - Sheet2 - offset=${offset}, limit=10 (overflow)`, async (t) => {
-    const resp = await RESTSheets.get(t.context.sheetsApi, {
+    const resp = await SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet2.title,
       offset,
@@ -168,7 +168,7 @@ test("get - Sheet1 - offset=1, limit=null", async (t) => {
 {
   const offset = TEST_SHEETS.Sheet1.values.length - 1 + 10
   test(`get - Sheet1 - offset=${offset}, limit=null (past end of data)`, async (t) => {
-    const resp = await RESTSheets.get(t.context.sheetsApi, {
+    const resp = await SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet1.title,
       offset,
@@ -178,7 +178,7 @@ test("get - Sheet1 - offset=1, limit=null", async (t) => {
 }
 
 test(`get - Sheet1!A2:B - offset=0, limit=1`, async (t) => {
-  const resp = await RESTSheets.get(t.context.sheetsApi, {
+  const resp = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: "Sheet1!A:B",
     limit: 1,
@@ -198,29 +198,29 @@ test(`get - Sheet1!A2:B - offset=0, limit=1`, async (t) => {
 
 test(`get - error - NotASheet - bad sheet`, async (t) => {
   const error = (await t.throwsAsync(
-    RESTSheets.get(t.context.sheetsApi, {
+    SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: "NotASheet",
     }),
     {
-      instanceOf: RESTSheets.InvalidSheetError,
+      instanceOf: SheetsDAL.errors.MissingSheetError,
     }
-  )) as RESTSheets.InvalidSheetError
+  )) as SheetsDAL.errors.MissingSheetError
   t.deepEqual(error.redactedInfo.sheet, "NotASheet")
 })
 
 test(`get - error - Sheet3 - no headers`, async (t) => {
   const error = (await t.throwsAsync(
-    RESTSheets.get(t.context.sheetsApi, {
+    SheetsDAL.get(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet3.title,
     }),
     {
-      instanceOf: RESTSheets.MisconfiguredSheetError,
+      instanceOf: SheetsDAL.errors.MisconfiguredSheetError,
     }
-  )) as RESTSheets.MisconfiguredSheetError
+  )) as SheetsDAL.errors.MisconfiguredSheetError
   t.deepEqual(error.redactedInfo, {
-    reason: RESTSheets.MisconfigurationReason.NoHeaders,
+    reason: SheetsDAL.errors.MisconfigurationReason.NoHeaders,
     sheet: SheetName(TEST_SHEETS.Sheet3.title),
   })
 })

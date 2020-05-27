@@ -1,5 +1,5 @@
 import test from "ava"
-import { objectsFromRowMajor2D } from "../../src/rest-sheets/utils"
+import { objectsFromRowMajor2D } from "../../../src/google-sheets-model/utils"
 
 test("objectsFromRowMajor2D - no values", async (t) => {
   t.deepEqual(objectsFromRowMajor2D(["name", "age", "color"], [[]]), [

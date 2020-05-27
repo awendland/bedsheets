@@ -11,6 +11,14 @@
 
 ## FAQ
 
+### What's a _Spreadsheet ID_ or _A1 Notation_?
+
+See Google's [Sheet API Concepts](https://developers.google.com/sheets/api/guides/concepts) for an overview of these Google Sheets (and, in the case of _A1 Notation_, general spreadsheet) concepts.
+
+### How are dates stored in Google Sheets?
+
+See Google's [Sheet API Concepts: Date & Time](https://developers.google.com/sheets/api/guides/concepts#datetime_serial_numbers) section for an overview of how spreadsheets store date & time.
+
 ### I'm getting a 403 error when trying to access my sheet
 
 There are several trouble-shooting steps to work through:

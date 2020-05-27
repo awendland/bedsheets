@@ -1,11 +1,11 @@
 import { TestInterface, Implementation } from "ava"
 import { sheets_v4, google } from "googleapis"
-import { FormattedSheetRow } from "../../../src/rest-sheets"
+import { FormattedSheetRow } from "../../src/google-sheets-model"
 
 // https://developers.google.com/sheets/api/limits
 // As of 2020-02-21: 100 requests per 100 seconds
 export const RATE_LIMIT_DELAY_MS =
-  Number.parseInt(process.env.RATE_LIMIT_DELAY_MS ?? "250") || 250
+  Number.parseInt(process.env.RATE_LIMIT_DELAY_MS ?? "3000") || 3000
 
 /**
  * Data template representing how a sheet should be seeded

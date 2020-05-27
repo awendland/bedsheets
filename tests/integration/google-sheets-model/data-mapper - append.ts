@@ -1,8 +1,7 @@
 import anyTest from "ava"
 
-import * as RESTSheets from "../../../src/rest-sheets"
-import { setupIntegrationTest } from "./_common"
-import { SheetName, BadDataError, Headers } from "../../../src/rest-sheets"
+import * as SheetsDAL from "../../../src/google-sheets-model"
+import { setupIntegrationTest } from "../_common"
 
 const TEST_SHEETS = {
   Sheet1: {
@@ -17,7 +16,7 @@ const TEST_SHEETS = {
     id: 2,
     title: "Sheet2",
     values: [
-      ["name", "age", "age"],
+      ["name", "favorite_food", "favorite_food"],
       ["Catherine", "In-n-out", "23"],
     ],
   },
@@ -35,7 +34,7 @@ test("append - Sheet1 - happy path w/ 1 object", async (t) => {
     favorite_food: "Udon",
     age: "54",
   }
-  const resp_append = await RESTSheets.append(t.context.sheetsApi, {
+  const resp_append = await SheetsDAL.append(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     data: [object],
@@ -44,7 +43,7 @@ test("append - Sheet1 - happy path w/ 1 object", async (t) => {
     updatedRange: `${TEST_SHEETS.Sheet1.title}!A3:C3`,
     updatedRowCount: 1,
   })
-  const resp_get = await RESTSheets.get(t.context.sheetsApi, {
+  const resp_get = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 1,
@@ -58,7 +57,7 @@ test("append - Sheet1 - happy path w/ 200 objects", async (t) => {
     favorite_food: "Udon",
     age: "54",
   })
-  const resp_append = await RESTSheets.append(t.context.sheetsApi, {
+  const resp_append = await SheetsDAL.append(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     data,
@@ -67,7 +66,7 @@ test("append - Sheet1 - happy path w/ 200 objects", async (t) => {
     updatedRange: `${TEST_SHEETS.Sheet1.title}!A3:C202`,
     updatedRowCount: 200,
   })
-  const resp_get = await RESTSheets.get(t.context.sheetsApi, {
+  const resp_get = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 1,
@@ -81,15 +80,15 @@ test("append - Sheet1 - happy path w/ 200 objects", async (t) => {
 
 test(`append - error - NotASheet - bad sheet`, async (t) => {
   const error = (await t.throwsAsync(
-    RESTSheets.append(t.context.sheetsApi, {
+    SheetsDAL.append(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: "NotASheet",
       data: [],
     }),
     {
-      instanceOf: RESTSheets.InvalidSheetError,
+      instanceOf: SheetsDAL.errors.MissingSheetError,
     }
-  )) as RESTSheets.InvalidSheetError
+  )) as SheetsDAL.errors.MissingSheetError
   t.deepEqual(error.redactedInfo.sheet, "NotASheet")
 })
 
@@ -100,23 +99,23 @@ test(`append - error - Sheet1 - missing + extra keys`, async (t) => {
     weight: "439 kg",
   }
   const error = (await t.throwsAsync(
-    RESTSheets.append(t.context.sheetsApi, {
+    SheetsDAL.append(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet1.title,
       data: [datum],
     }),
     {
-      instanceOf: RESTSheets.BadDataError,
+      instanceOf: SheetsDAL.errors.BadDataError,
     }
-  )) as BadDataError
+  )) as SheetsDAL.errors.BadDataError
   t.deepEqual(error.redactedInfo, {
-    sheet: SheetName(TEST_SHEETS.Sheet1.title),
+    sheet: SheetsDAL.SheetName(TEST_SHEETS.Sheet1.title),
     malformedEntries: [
       {
         value: datum,
         index: 0,
         fields: {
-          missing: ["age"] as Headers,
+          missing: ["age"] as SheetsDAL.Headers,
           extra: ["weight"],
         },
       },
@@ -125,7 +124,7 @@ test(`append - error - Sheet1 - missing + extra keys`, async (t) => {
 })
 
 test("append - Sheet1 - missing + extra keys but not strict", async (t) => {
-  const resp_append = await RESTSheets.append(t.context.sheetsApi, {
+  const resp_append = await SheetsDAL.append(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     data: [{ name: "Stacie", age: "54", weight: "439 kg" }],
@@ -137,7 +136,7 @@ test("append - Sheet1 - missing + extra keys but not strict", async (t) => {
     updatedRange: `${TEST_SHEETS.Sheet1.title}!A3:C3`,
     updatedRowCount: 1,
   })
-  const resp_get = await RESTSheets.get(t.context.sheetsApi, {
+  const resp_get = await SheetsDAL.get(t.context.sheetsApi, {
     spreadsheetId: t.context.spreadsheetId,
     sheetName: TEST_SHEETS.Sheet1.title,
     offset: 1,
@@ -153,19 +152,19 @@ test("append - Sheet1 - missing + extra keys but not strict", async (t) => {
   })
 })
 
-test("append - error - Sheet1 - duplicate headers", async (t) => {
+test("append - error - Sheet2 - duplicate headers", async (t) => {
   const error = (await t.throwsAsync(
-    RESTSheets.append(t.context.sheetsApi, {
+    SheetsDAL.append(t.context.sheetsApi, {
       spreadsheetId: t.context.spreadsheetId,
       sheetName: TEST_SHEETS.Sheet2.title,
       data: [{}],
     }),
     {
-      instanceOf: RESTSheets.MisconfiguredSheetError,
+      instanceOf: SheetsDAL.errors.MisconfiguredSheetError,
     }
-  )) as RESTSheets.MisconfiguredSheetError
+  )) as SheetsDAL.errors.MisconfiguredSheetError
   t.deepEqual(error.redactedInfo, {
-    sheet: SheetName(TEST_SHEETS.Sheet2.title),
-    reason: RESTSheets.MisconfigurationReason.DuplicateHeaders,
+    sheet: SheetsDAL.SheetName(TEST_SHEETS.Sheet2.title),
+    reason: SheetsDAL.errors.MisconfigurationReason.DuplicateHeaders,
   })
 })
