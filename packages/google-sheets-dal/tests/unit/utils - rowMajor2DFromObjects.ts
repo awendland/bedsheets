@@ -1,19 +1,16 @@
-import test from "ava"
-import { rowMajor2DFromObjects } from "../../../src/google-sheets-model/utils"
-import { Headers } from "../../../src/google-sheets-model"
+import { rowMajor2DFromObjects } from "../../src/utils"
+import { Headers } from "../../src"
 
-test("rowMajor2DFromObjects - no objects, not strict", async (t) => {
-  t.deepEqual(
-    rowMajor2DFromObjects(["name", "age"] as Headers, [], { strict: false }),
-    [[], []]
-  )
+test("rowMajor2DFromObjects - no objects, not strict", async () => {
+  expect(
+    rowMajor2DFromObjects(["name", "age"] as Headers, [], { strict: false })
+  ).toEqual([[], []])
 })
 
-test("rowMajor2DFromObjects - no objects, strict", async (t) => {
-  t.deepEqual(
-    rowMajor2DFromObjects(["name", "age"] as Headers, [], { strict: true }),
-    [[], []]
-  )
+test("rowMajor2DFromObjects - no objects, strict", async () => {
+  expect(
+    rowMajor2DFromObjects(["name", "age"] as Headers, [], { strict: true })
+  ).toEqual([[], []])
 })
 
 {
@@ -21,15 +18,15 @@ test("rowMajor2DFromObjects - no objects, strict", async (t) => {
   const objects = [{ name: "Rebecca", age: "23" }]
   const newRows = [["Rebecca"]]
 
-  test("rowMajor2DFromObjects - extra keys, not strict", async (t) => {
-    t.deepEqual(rowMajor2DFromObjects(headers, objects, { strict: false }), [
+  test("rowMajor2DFromObjects - extra keys, not strict", async () => {
+    expect(rowMajor2DFromObjects(headers, objects, { strict: false })).toEqual([
       newRows,
       [],
     ])
   })
 
-  test("rowMajor2DFromObjects - extra keys, strict", async (t) => {
-    t.deepEqual(rowMajor2DFromObjects(headers, objects, { strict: true }), [
+  test("rowMajor2DFromObjects - extra keys, strict", async () => {
+    expect(rowMajor2DFromObjects(headers, objects, { strict: true })).toEqual([
       newRows,
       [
         {
@@ -47,15 +44,15 @@ test("rowMajor2DFromObjects - no objects, strict", async (t) => {
   const objects = [{ name: "Rebecca", age: "23" }]
   const newRows = [["Rebecca", "23", undefined]]
 
-  test("rowMajor2DFromObjects - missing keys, not strict", async (t) => {
-    t.deepEqual(rowMajor2DFromObjects(headers, objects, { strict: false }), [
+  test("rowMajor2DFromObjects - missing keys, not strict", async () => {
+    expect(rowMajor2DFromObjects(headers, objects, { strict: false })).toEqual([
       newRows,
       [],
     ])
   })
 
-  test("rowMajor2DFromObjects - missing keys, strict", async (t) => {
-    t.deepEqual(rowMajor2DFromObjects(headers, objects, { strict: true }), [
+  test("rowMajor2DFromObjects - missing keys, strict", async () => {
+    expect(rowMajor2DFromObjects(headers, objects, { strict: true })).toEqual([
       newRows,
       [
         {
@@ -68,33 +65,31 @@ test("rowMajor2DFromObjects - no objects, strict", async (t) => {
   })
 }
 
-test("rowMajor2DFromObjects - 1 object", async (t) => {
-  t.deepEqual(
+test("rowMajor2DFromObjects - 1 object", async () => {
+  expect(
     rowMajor2DFromObjects(
       ["name", "age", "color"] as Headers,
       [{ age: "23", name: "Rebecca", color: "blue" }],
       {
         strict: true,
       }
-    ),
-    [[["Rebecca", "23", "blue"]], []]
-  )
+    )
+  ).toEqual([[["Rebecca", "23", "blue"]], []])
 })
 
-test("rowMajor2DFromObjects - 10 objects", async (t) => {
+test("rowMajor2DFromObjects - 10 objects", async () => {
   const obj = { age: "23", name: "Rebecca", color: "blue" }
   const values = ["Rebecca", "23", "blue"]
-  t.deepEqual(
+  expect(
     rowMajor2DFromObjects(
       ["name", "age", "color"] as Headers,
       new Array(10).fill(obj),
       { strict: true }
-    ),
-    [new Array(10).fill(values), []]
-  )
+    )
+  ).toEqual([new Array(10).fill(values), []])
 })
 
-test("rowMajor2DFromObjects - 10 objects, malformed differently", async (t) => {
+test("rowMajor2DFromObjects - 10 objects, malformed differently", async () => {
   const obj_missing = { name: "Rebecca", age: "23" }
   const obj_extra = {
     name: "Rebecca",
@@ -108,14 +103,12 @@ test("rowMajor2DFromObjects - 10 objects, malformed differently", async (t) => {
     objects,
     { strict: true }
   )
-  t.deepEqual(
-    newRows,
+  expect(newRows).toEqual(
     new Array(10)
       .fill(["Rebecca", "23", undefined], 0, 5)
       .fill(["Rebecca", "23", "blue"], 5, 10)
   )
-  t.deepEqual(
-    malformedEntries,
+  expect(malformedEntries).toEqual(
     new Array(10).fill(null).map((_, i) => ({
       fields: {
         missing: (i < 5 ? ["color"] : []) as Headers,

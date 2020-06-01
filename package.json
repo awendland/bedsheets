@@ -1,46 +1,34 @@
 {
-  "name": "bedsheets",
-  "version": "0.1.0",
-  "description": "Turn Google Sheets into a quick & dirty RESTful DB",
-  "repository": "github.com/awendland/bedsheets",
+  "name": "bedsheets-monorepo",
+  "private": true,
+  "repository": "git@github.com:awendland/bedsheets.git",
   "author": "Alex Wendland <me@alexwendland.com>",
   "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "clean": "shx rm -rf build/",
+    "clean": "shx rm -rf packages/*/dist/",
     "prettier": "prettier --write .",
+    "build:all": "lerna run build",
+    "build:all:watch": "lerna run --parallel build:watch",
     "test:all": "yarn test:unit && yarn test:integration",
-    "test:all:coverage": "nyc yarn test:all",
-    "test:integration": "ava --serial build/tests/integration/**/*",
-    "test:unit": "ava build/tests/unit/**/*"
-  },
-  "engines": {
-    "node": ">=12",
-    "yarn": "1.x"
+    "test:unit": "jest --testPathPattern='/unit'",
+    "test:integration": "jest --testPathPattern='/integration' --runInBand"
   },
   "dependencies": {
-    "googleapis": "^51.0.0"
+    "@types/node": "10.14.2"
   },
   "devDependencies": {
-    "@types/node": "^14.0.4",
-    "@types/supertest": "^2.0.9",
-    "ava": "^3.8.2",
-    "nyc": "^15.0.1",
-    "prettier": "^2.0.5",
+    "@types/jest": "^25.2.3",
+    "jest": "^26.0.1",
+    "lerna": "^3.22.0",
     "shx": "^0.3.2",
-    "supertest": "^4.0.2",
-    "ts-node": "^8.10.1",
+    "ts-jest": "^26.1.0",
     "typescript": "^3.9.3"
   },
-  "keywords": [
-    "google",
-    "sheets",
-    "spreadsheet",
-    "serverless",
-    "faas",
-    "rest",
-    "database",
-    "db"
-  ]
+  "engines": {
+    "node": ">=10.14.2",
+    "yarn": "1.x"
+  }
 }

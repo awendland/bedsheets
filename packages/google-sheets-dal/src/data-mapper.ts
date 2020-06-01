@@ -49,6 +49,7 @@ export const describe = redactErrors(async function _describe(
     sheetName: string
   }
 ): Promise<{ headers: Headers }> {
+  // @ts-ignore TS6133
   const _enforceKnownHeaderSize: 1 = HEADER_SIZE // this will error if HEADER_SIZE is changed to an unacceptable value
   const sheet = SheetName(sheetName)
   const resp = await client.spreadsheets.values.get({
@@ -113,6 +114,7 @@ export const get = redactErrors(async function _get(
     offset?: number
   }
 ): Promise<{ data: Array<{}> }> {
+  // @ts-ignore TS6133
   const _enforceKnownHeaderSize: 1 = HEADER_SIZE // this will error if HEADER_SIZE is changed to an unacceptable value
   const sheet = SheetName(sheetName)
   let headersRange = `'${sheet}'!1:${HEADER_SIZE}` as A1Notation

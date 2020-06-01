@@ -1,0 +1,37 @@
+{
+  "name": "@bedsheets/google-sheets-dal",
+  "version": "0.1.0",
+  "description": "Data access layer on top of the Google Sheets v4 API",
+  "repository": "github.com/awendland/bedsheets",
+  "author": "Alex Wendland <me@alexwendland.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*.d.ts",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "dependencies": {
+    "googleapis": "^51.0.0"
+  },
+  "devDependencies": {
+    "@bedsheets/test-helpers": "0.1.0",
+    "jest": "*",
+    "typescript": "*"
+  },
+  "keywords": [
+    "google",
+    "sheets",
+    "spreadsheet",
+    "serverless",
+    "faas",
+    "rest",
+    "database",
+    "db"
+  ]
+}

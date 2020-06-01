@@ -1,0 +1,29 @@
+{
+  "name": "@bedsheets/rest-server",
+  "version": "0.1.0",
+  "description": "Turn Google Sheets into a quick & dirty RESTful DB",
+  "repository": "github.com/awendland/bedsheets",
+  "author": "Alex Wendland <me@alexwendland.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*.d.ts",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@bedsheets/google-sheets-dal": "0.1.0",
+    "@types/node": "*"
+  },
+  "devDependencies": {
+    "@bedsheets/test-helpers": "0.1.0",
+    "@types/supertest": "^2.0.9",
+    "supertest": "^4.0.2",
+    "typescript": "*"
+  }
+}

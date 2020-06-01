@@ -1,0 +1,23 @@
+{
+  "name": "@bedsheets/test-helpers",
+  "version": "0.1.0",
+  "description": "Common testing infrastructure for @bedsheets/* packages",
+  "repository": "github.com/awendland/bedsheets",
+  "author": "Alex Wendland <me@alexwendland.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*.d.ts",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "googleapis": "^51.0.0",
+    "typescript": "*"
+  }
+}

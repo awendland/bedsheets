@@ -1,8 +1,8 @@
-import http, { ClientRequest, IncomingMessage, STATUS_CODES } from "http"
+import http from "http"
 import * as util from "util"
-import * as Log from "../simple-logger"
-import * as SheetsDAL from "../google-sheets-model"
-import { google, sheets_v4, GoogleApis } from "googleapis"
+import { google, sheets_v4 } from "googleapis"
+import * as SheetsDAL from "@bedsheets/google-sheets-dal"
+import * as Log from "./simple-logger"
 import { readRequestBody } from "./body-parser"
 import { Router } from "./router"
 import {
@@ -199,7 +199,11 @@ function parseRequestUrl(request: TaggedIncomingMessage): ParsedUrlInfo {
     virtualResource:
       rawPathInfo.virtualResource &&
       decodeURIComponent(rawPathInfo.virtualResource),
-    queryParams: Object.fromEntries(url.searchParams.entries()),
+    queryParams: (() => {
+      const obj: any = {}
+      url.searchParams.forEach((v, k) => (obj[k] = v))
+      return obj
+    })(),
   }
   Log.info(`[${request.id}]parsed-request%j`, parsedInfo)
   return parsedInfo

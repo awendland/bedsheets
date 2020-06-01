@@ -1,5 +1,5 @@
 import { GaxiosError } from "gaxios"
-import { Headers, SheetName } from "./common"
+import { SheetName } from "./common"
 import { MalformedEntry } from "./utils"
 
 export class RedactedError<I extends {}, E extends Error> extends Error {
