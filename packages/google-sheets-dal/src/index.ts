@@ -1,4 +1,5 @@
 export * from "./common"
 export * as utils from "./utils"
 export * as errors from "./errors"
+export * as auth from "./auth"
 export * from "./data-mapper"

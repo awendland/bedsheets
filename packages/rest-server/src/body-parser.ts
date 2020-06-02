@@ -9,9 +9,9 @@ export class RequestBody {
    * Retrieve the request data as a string. This function is memoized, so subsequent
    * calls will return the same decoded string.
    *
-   * @param encoding How to string decode the raw request data. Defaults to utf-8.
+   * @param encoding How to string decode the raw request data. Defaults to utf8.
    */
-  public async asString(encoding: BufferEncoding = "utf-8") {
+  public async asString(encoding: BufferEncoding = "utf8") {
     if (this.string) return this.string
     this.string = this.data.toString(encoding)
     return this.string
@@ -22,9 +22,9 @@ export class RequestBody {
    * Retrieve the request data as JSON. This function is memoized, so subsequent
    * calls will return the same decoded JSON object.
    *
-   * @param encoding How to string decode the raw request data. Defaults to utf-8.
+   * @param encoding How to string decode the raw request data. Defaults to utf8.
    */
-  public async asJson(encoding: BufferEncoding = "utf-8") {
+  public async asJson(encoding: BufferEncoding = "utf8") {
     if (this.json) return this.json
     try {
       this.json = JSON.parse(await this.asString(encoding))

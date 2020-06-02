@@ -1,6 +1,6 @@
 import http from "http"
 import * as util from "util"
-import { google, sheets_v4 } from "googleapis"
+import { sheets_v4 } from "googleapis"
 import * as SheetsDAL from "@bedsheets/google-sheets-dal"
 import * as Log from "./simple-logger"
 import { readRequestBody } from "./body-parser"
@@ -19,34 +19,13 @@ Log.setLevelByString(process.env.LOG_LEVEL ?? "INFO", false)
 export async function runServer({
   maxRequestSize = parseInt(process.env.MAX_REQUEST_SIZE ?? "") || 50 * 2 ** 20, // 50 MiB
   port = parseInt(process.env.PORT ?? "") || 3141,
-  google_auth_client_email = process.env.GOOGLE_AUTH_CLIENT_EMAIL,
-  google_auth_private_key = process.env.GOOGLE_AUTH_PRIVATE_KEY,
 }: {
   maxRequestSize?: number
   port?: number | null
-  google_auth_client_email?: string
-  google_auth_private_key?: string
 }): Promise<http.Server> {
-  // Loads credentials from either:
-  // * GOOGLE_APPLICATION_CREDENTIALS which specifies a path to a credentials json file
-  // OR
-  // * GOOGLE_AUTH_CLIENT_EMAIL, GOOGLE_AUTH_PRIVATE_KEY which specify the information directly
-  const sheetsApi = google.sheets({
-    version: "v4",
-    auth: await new google.auth.GoogleAuth({
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-      ...(google_auth_client_email && google_auth_private_key
-        ? {
-            credentials: {
-              client_email: google_auth_client_email,
-              private_key: google_auth_private_key,
-            },
-          }
-        : {}),
-    }).getClient(),
-  })
-
-  const router = setupRouter(sheetsApi)
+  const router = setupRouter(
+    await SheetsDAL.auth.getSheetsClient(process.env as any)
+  )
 
   const server = http.createServer(async (request, response) => {
     // Tag each request so that log messages are easier to follow
@@ -118,12 +97,12 @@ function setupRouter(sheetsApi: sheets_v4.Sheets) {
       request: TaggedIncomingMessage
       parsedReq: ParsedRequest
     }
-  >(({ request, parsedReq }) => {
+  >(() => {
     throw new HttpResponse(405, {
       message: `Only {GET, POST} requests methods are supported`,
     })
   })
-    .error(({ error: e, request, parsedReq }) => {
+    .error(({ error: e, request }) => {
       if (e instanceof SheetsDAL.errors.RedactedError) {
         Log.traceIf(() => [
           `[${request.id}]redacted-error`,
@@ -133,14 +112,14 @@ function setupRouter(sheetsApi: sheets_v4.Sheets) {
       }
       throw e // either an HttpResponse or an error that'll be wrapped into a 500
     })
-    .add(["GET", "describe"], async ({ request, parsedReq }) => {
+    .add(["GET", "describe"], async ({ parsedReq }) => {
       const payload = await SheetsDAL.describe(sheetsApi, {
         spreadsheetId: parsedReq.spreadsheetId,
         sheetName: parsedReq.sheetName,
       })
       throw new HttpResponse(200, payload)
     })
-    .add(["GET", undefined], async ({ request, parsedReq }) => {
+    .add(["GET", undefined], async ({ parsedReq }) => {
       const { offset, limit } = parsedReq.queryParams as any
       // TODO validate offset and limit
       const payload = await SheetsDAL.get(sheetsApi, {
@@ -151,7 +130,7 @@ function setupRouter(sheetsApi: sheets_v4.Sheets) {
       })
       throw new HttpResponse(200, payload)
     })
-    .add(["POST", undefined], async ({ request, parsedReq }) => {
+    .add(["POST", undefined], async ({ parsedReq }) => {
       let { strict } = parsedReq.queryParams as any
       if (strict) strict = strict == "true"
       // TODO validate strict

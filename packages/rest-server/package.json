@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@bedsheets/google-sheets-dal": "0.1.0",
-    "@types/node": "*"
+    "@types/node": "10.14.2"
   },
   "devDependencies": {
     "@bedsheets/test-helpers": "0.1.0",

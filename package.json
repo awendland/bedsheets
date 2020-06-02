@@ -13,11 +13,11 @@
     "build:all": "lerna run build",
     "build:all:watch": "lerna run --parallel build:watch",
     "test:all": "yarn test:unit && yarn test:integration",
+    "test:all:ci": "yarn test:unit:ci && yarn test:integration:ci",
     "test:unit": "jest --testPathPattern='/unit'",
-    "test:integration": "jest --testPathPattern='/integration' --runInBand"
-  },
-  "dependencies": {
-    "@types/node": "10.14.2"
+    "test:unit:ci": "yarn test:unit --ci --verbose --coverage",
+    "test:integration": "jest --testPathPattern='/integration' --runInBand",
+    "test:integration:ci": "yarn test:integration --ci --verbose --coverage"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",

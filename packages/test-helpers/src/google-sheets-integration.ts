@@ -43,6 +43,7 @@ export const setupAPI = async (
     google_auth_private_key?: string
   } = {}
 ) => {
+  // TODO consider using the hanlder in google-sheets-dal/auth.ts to instantiate this
   mutableContext.sheetsApi = google.sheets({
     version: "v4",
     auth: await new google.auth.GoogleAuth({

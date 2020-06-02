@@ -55,9 +55,9 @@ Tests should be stored under a `tests` folder in each package's folder (e.g. `./
 
 ##### Node
 
-To ensure that these packages can run across all targetted Node versions `@types/node` should be set to the oldest supported version.
+To ensure that these packages can run across all targeted Node versions `@types/node` should be set to the oldest supported version.
 
-Furthermore, CI should run against the latest version of Node and the oldest supported version (with the assumption that Node had no breaking changes in between).
+Furthermore, CI should run against this oldest supported version (with the assumption that Node had no breaking changes since).
 
 ##### Typescript
 
