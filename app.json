@@ -1,0 +1,27 @@
+{
+  "name": "bedsheets-rest-server",
+  "env": {
+    "GOOGLE_AUTH_CLIENT_EMAIL": {
+      "description": "Email address of the service account you created for Bedsheets."
+    },
+    "GOOGLE_AUTH_PRIVATE_KEY": {
+      "description": "Private key of the service account you created for Bedsheets."
+    },
+    "LOG_LEVEL": {
+      "description": "Verbosity of logs, either: NONE | ERROR | WARN | INFO | TRACE",
+      "value": "INFO",
+      "required": false
+    }
+  },
+  "build": {
+    "skip": false
+  },
+  "hooks": {
+    "prebuild": {
+      "commands": [
+        "docker pull bedsheets/rest-server:latest",
+        "docker tag bedsheets/rest-server:latest $IMAGE_URL"
+      ]
+    }
+  }
+}
