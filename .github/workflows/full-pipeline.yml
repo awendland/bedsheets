@@ -1,0 +1,93 @@
+name: Full Pipeline
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    name: Run pre-commit checks
+    steps:
+      # Steps taken from https://github.com/pre-commit/action
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+      - name: set PY
+        run: echo "::set-env name=PY::$(python -c 'import hashlib, sys;print(hashlib.sha256(sys.version.encode()+sys.executable.encode()).hexdigest())')"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+      - uses: pre-commit/action@v1.1.0
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["10.14.2"] # This should match the oldest target node version, as specified by @types/node in the root package.json
+    name: Test on node ${{ matrix.node }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install deps and build
+        run: |
+          node --version
+          npm --version
+          yarn --version
+          yarn install --frozen-lockfile
+          yarn build:all
+        env:
+          CI: true
+          NODE_OPTIONS: --max-old-space-size=4096
+      - name: Run tests
+        run: |
+          yarn test:all:ci
+        env:
+          CI: true
+          NODE_OPTIONS: --max-old-space-size=4096
+          TEST_SPREADSHEET_ID: ${{ secrets.TEST_SPREADSHEET_ID }}
+          GOOGLE_AUTH_CLIENT_EMAIL: ${{ secrets.GOOGLE_AUTH_CLIENT_EMAIL }}
+          GOOGLE_AUTH_PRIVATE_KEY: ${{ secrets.GOOGLE_AUTH_PRIVATE_KEY }}
+
+  docker:
+    needs: [test, pre-commit]
+    if: >-
+      needs.test.result == 'success' && needs.pre-commit.result == 'success'
+      && (github.ref == 'ref/head/master' || contains(github.ref, 'ref/tag'))
+    runs-on: ubuntu-latest
+    name: Build docker image for REST server
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build & push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          path: .
+          dockerfile: docker/rest-server/Dockerfile
+          tag_with_ref: true # refs/head/master will be turned into "latest"
+          add_git_labels: true
+          always_pull: true
+          repository: bedsheets/rest-server
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build & push to GCR
+        uses: docker/build-push-action@v1
+        with: # This won't perform much work thanks to cache hits from the prev step
+          path: .
+          dockerfile: docker/rest-server/Dockerfile
+          tag_with_ref: true # refs/head/master will be turned into "latest"
+          add_git_labels: true
+          always_pull: false
+          registry: gcr.io
+          repository: bedsheets/rest-server
+          username: _json_key
+          password: ${{ secrets.GCR_KEYFILE }}

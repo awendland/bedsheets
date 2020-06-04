@@ -1,5 +1,17 @@
-node_modules/
-dist/
-credentials/
-deploy/
-.*
+*
+!package.json
+!yarn.lock
+!lerna.json
+!tsconfig*
+!packages/
+packages/*/dist/
+packages/*/node_modules/
+packages/*/tests/
+**/.DS_Store
+
+# Can't do the following because of https://github.com/moby/moby/issues/40319
+# !packages/*/src
+# !packages/*/tsconfig.json
+# !packages/*/package.json
+
+# Consider using an approach like https://github.com/moby/moby/issues/12971#issuecomment-138134947
