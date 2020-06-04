@@ -22,6 +22,10 @@ jobs:
       - uses: pre-commit/action@v1.1.0
 
   test:
+    # This job (and any of its dependents) will be skipped if the commit message
+    # contains "no-test" anywhere in it. This is intended to be used when doing things
+    # such as quickly iterating on README documentation.
+    if: "!contains(github.event.head_commit.message, 'no-test')"
     runs-on: ubuntu-latest
     strategy:
       matrix:
