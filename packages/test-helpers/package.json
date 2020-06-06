@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@bedsheets/test-helpers",
   "version": "0.1.0",
   "description": "Common testing infrastructure for @bedsheets/* packages",
@@ -19,5 +20,6 @@
   "devDependencies": {
     "googleapis": "^51.0.0",
     "typescript": "*"
-  }
+  },
+  "gitHead": "d541119b333cce39ecc4072905cb03da7a0481e9"
 }

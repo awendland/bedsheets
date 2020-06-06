@@ -20,9 +20,12 @@
     "googleapis": "^51.0.0"
   },
   "devDependencies": {
-    "@bedsheets/test-helpers": "0.1.0",
+    "@bedsheets/test-helpers": "^0.1.0",
     "jest": "*",
     "typescript": "*"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "google",
@@ -33,5 +36,6 @@
     "rest",
     "database",
     "db"
-  ]
+  ],
+  "gitHead": "d541119b333cce39ecc4072905cb03da7a0481e9"
 }

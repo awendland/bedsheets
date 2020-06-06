@@ -18,13 +18,27 @@
     "build:watch": "tsc --watch"
   },
   "dependencies": {
-    "@bedsheets/google-sheets-dal": "0.1.0",
+    "@bedsheets/google-sheets-dal": "^0.1.0",
     "@types/node": "10.14.2"
   },
   "devDependencies": {
-    "@bedsheets/test-helpers": "0.1.0",
+    "@bedsheets/test-helpers": "^0.1.0",
     "@types/supertest": "^2.0.9",
     "supertest": "^4.0.2",
     "typescript": "*"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "google",
+    "sheets",
+    "spreadsheet",
+    "serverless",
+    "faas",
+    "rest",
+    "database",
+    "db"
+  ],
+  "gitHead": "d541119b333cce39ecc4072905cb03da7a0481e9"
 }
