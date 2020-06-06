@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "shx rm -rf packages/*/dist/",
     "commit": "git-cz",
-    "prettier": "prettier --write .",
+    "prettier": "pre-commit run prettier --all-files",
     "build:all": "lerna run build",
     "build:all:watch": "lerna run --parallel build:watch",
     "test:all": "yarn test:unit && yarn test:integration",
@@ -38,5 +38,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "prettier": {
+    "semi": false
   }
 }
