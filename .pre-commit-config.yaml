@@ -17,6 +17,11 @@ repos:
     hooks:
       - id: prettier
 
+  - repo: https://github.com/thlorenz/doctoc
+    sha: v1.4.0
+    hooks:
+      - id: doctoc
+
   - repo: local
     hooks:
       # https://github.com/hadolint/hadolint
