@@ -1,5 +1,7 @@
 # Bedsheets
 
+[![Badge: Github Actions](https://img.shields.io/github/workflow/status/awendland/bedsheets/Full%20Pipeline)](https://github.com/awendland/bedsheets/actions) [![Badge: Docker Image](https://img.shields.io/docker/image-size/bedsheets/rest-server?label=docker%20image)](https://hub.docker.com/r/bedsheets/rest-server) ![Badge: Node Version](https://img.shields.io/node/v/@bedsheets/rest-server) [![Badge: License](https://img.shields.io/github/license/awendland/bedsheets)](https://en.wikipedia.org/wiki/MIT_License) [![Badge: Github Stars](https://img.shields.io/github/stars/awendland/bedsheets?style=social)](https://github.com/awendland/bedsheets)
+
 `bedsheets` is a Node.js proxy that lets you turn Google Sheets into a quick and dirty RESTful database. It's intended to be:
 
 - **your simplest database**, if you need something more complex look at our [suggested alternatives](#suggested-alternatives)

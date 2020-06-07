@@ -27,6 +27,9 @@
     "supertest": "^4.0.2",
     "typescript": "*"
   },
+  "engines": {
+    "node": ">=10.14.2"
+  },
   "publishConfig": {
     "access": "public"
   },

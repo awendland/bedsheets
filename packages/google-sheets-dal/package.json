@@ -24,6 +24,9 @@
     "jest": "*",
     "typescript": "*"
   },
+  "engines": {
+    "node": ">=10.14.2"
+  },
   "publishConfig": {
     "access": "public"
   },
