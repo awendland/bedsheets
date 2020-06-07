@@ -21,6 +21,7 @@ repos:
     sha: v1.4.0
     hooks:
       - id: doctoc
+        files: ^README.md$
 
   - repo: local
     hooks:

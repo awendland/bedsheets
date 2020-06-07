@@ -576,9 +576,9 @@ This project uses `lerna` with `yarn workspaces` to manage a variety of packages
 
 Currently, the project is composed of the following packages:
 
-- `@bedsheets/google-sheets-dal` - This is a data access layer for Google Sheets that abstracts the `sheets_v4.Sheets` API in the `googleapis` package to provide a simpler object array interface for working with Google Sheets.
-- `@bedsheets/rest-server` - This is an HTTP server that exposes the operations from `@bedsheets/google-sheets-dal` in a RESTful way (eg. translating the `append` operation into `POST` requests).
-- `@bedsheets/test-helpers` - This is an internal module which provides shared infrastructure for writing integration tests, such as a tool for seeding spreadsheets for testing.
+- `@bedsheets/google-sheets-dal` - This is a data access layer for Google Sheets that abstracts the `sheets_v4.Sheets` API in the `googleapis` package to provide a simpler object array interface for working with Google Sheets. <!-- description:google-sheets-dal -->
+- `@bedsheets/rest-server` - This is an HTTP server that exposes the operations from `@bedsheets/google-sheets-dal` in a RESTful way (eg. translating the `append` operation into `POST` requests). <!-- description:rest-server -->
+- `@bedsheets/test-helpers` - This is an internal module which provides shared infrastructure for writing integration tests, such as a tool for seeding spreadsheets for testing. <!-- description:test-helpers -->
 
 #### Intraproject Package Dependencies
 
