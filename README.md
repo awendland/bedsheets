@@ -8,7 +8,7 @@
 - **no-maintenance**, so that you can deploy it once and forget about things
 - **self-hosted**, so that you don't have to risk unreliable or insecure 3rd-party services (plus, you can usually host it for free on most cloud providers!)
 
-<img height="18px" src="https://user-images.githubusercontent.com/1152104/83938433-fa99dd80-a788-11ea-9988-47f4e9caf288.png" /> Google Sheets provides several great database features: [built-in version control ↗](https://support.google.com/docs/answer/190843), [collaborative management ↗](https://support.google.com/docs/answer/9331169), [a great table browser ↗](https://itnext.io/using-google-sheets-as-a-database-for-react-apps-6c15b4481680) (it is a spreadsheets after all), [powerful data processing functions ↗](https://support.google.com/docs/answer/9330962), and [simple visualization tools ↗](https://developers.google.com/chart/interactive/docs/spreadsheets). By following simple conventions, Bedsheets lets you introduce table schemas [see docs](#sheet-schema) and expose them over HTTP(S) with REST endpoints and JSON payloads.
+<img height="18px" src="https://user-images.githubusercontent.com/1152104/83938433-fa99dd80-a788-11ea-9988-47f4e9caf288.png" /> Google Sheets provides several great database features: [built-in version control &#x29C9;](https://support.google.com/docs/answer/190843), [collaborative management &#x29C9;](https://support.google.com/docs/answer/9331169), [a great table browser &#x29C9;](https://itnext.io/using-google-sheets-as-a-database-for-react-apps-6c15b4481680) (it is a spreadsheets after all), [powerful data processing functions &#x29C9;](https://support.google.com/docs/answer/9330962), and [simple visualization tools &#x29C9;](https://developers.google.com/chart/interactive/docs/spreadsheets). By following simple conventions, Bedsheets lets you introduce table schemas [see docs](#sheet-schema) and expose them over HTTP(S) with REST endpoints and JSON payloads.
 
 Bedsheets is not trying to compete with real databases. Instead, it's trying to provide a database with a lower barrier to entry for those projects that you think _"wow, it would be nice if this had a database, but I don't want to go through the hassle of deploying/configuring/maintaining the infrastructure for one"_. For example, [@awendland](https://github.com/awendland) uses it to store temperature data recorded by a Raspberry Pi.
 
@@ -104,7 +104,7 @@ Each database (ie. spreadsheet) is represented by a spreadsheet ID. These can be
 <details>
   <summary><em>expand to see example screenshot</em></summary>
 
-![303 - Sheets - Share Link](https://user-images.githubusercontent.com/1152104/83590771-4fc8bb80-a50b-11ea-8f38-3ac07bcb10d8.png)
+![Google Sheets - Share Link](https://user-images.githubusercontent.com/1152104/83590771-4fc8bb80-a50b-11ea-8f38-3ac07bcb10d8.png)
 
 </details>
 
@@ -114,7 +114,7 @@ Retrieve entries from the `{sheet_name}` table. Entries will be returned as an a
 
 **Additional parameters:**
 
-These should be provided as [query parameters ↗](https://stackabuse.com/get-query-strings-and-parameters-in-express-js/).
+These should be provided as [query parameters &#x29C9;](https://stackabuse.com/get-query-strings-and-parameters-in-express-js/).
 
 - `offset={positive_integer}` - Only return results after the first `offset` results in the table. Defaults to `0`.
 
@@ -337,7 +337,7 @@ Any other errors thrown by the underlying `googleapis` interface will be logged 
 
 A simple schema can be enforced for the _database_ (ie. _spreadsheet_, see [terminology](#terminology)).
 
-To create a new _table_, [add a new _sheet_ to the _spreadsheet_](https://webapps.stackexchange.com/questions/7968/inserting-a-new-sheet-in-a-google-spreadsheet). The _sheet's_ name will be used as the _table_ name.
+To create a new _table_, [add a new _sheet_ to the _spreadsheet_ &#x29C9;](https://webapps.stackexchange.com/questions/7968/inserting-a-new-sheet-in-a-google-spreadsheet). The _sheet's_ name will be used as the _table_ name.
 
 The _table's_ schema is set by the values in the first row of the _sheet_. These values define the table's columns. Schemas are parsed during each request, so any changes are reflected immediately in subsequent requests.
 
@@ -352,7 +352,7 @@ You invite the Service Account like you'd invite any other user, via the share m
 <details>
   <summary><em>expand to see example screenshots</em></summary>
   
-  ![302 - Sheets - Share](https://user-images.githubusercontent.com/1152104/83590770-4f302500-a50b-11ea-83dd-742d17af82e1.png)
+  ![Google Sheets with an open share menu containing the service accounts email address](https://user-images.githubusercontent.com/1152104/83590770-4f302500-a50b-11ea-83dd-742d17af82e1.png)
 </details>
 
 ## Deploy
@@ -366,7 +366,7 @@ The goal of Bedsheets is to be as easy to deploy as possible. The hardest part i
 This project will be used to grant access to the Google Sheets API. If you already have a Google Cloud Project, then you can skip this step.
 
 <details>
-  <summary>Step 1. Navigate to the <a href="https://console.developers.google.com">Google Cloud Console</a> <em>(expand to see a screenshot)</em></summary>
+  <summary>Step 1. Navigate to the <a href="https://console.developers.google.com">Google Cloud Console &#x29C9;</a> <em>(expand to see a screenshot)</em></summary>
   
   ![001 - Console - Dashboard](https://user-images.githubusercontent.com/1152104/83590732-46d7ea00-a50b-11ea-9335-54ab2d3842a0.png)
 </details>
@@ -386,7 +386,7 @@ This project will be used to grant access to the Google Sheets API. If you alrea
 The Google Sheets API is disabled by default in Google Cloud Projects so you must enable it before Bedsheets can use it.
 
 <details>
-  <summary>Step 1. Navigate to the Google Sheets entry in the API Library (<a href="https://console.cloud.google.com/apis/api/sheets.googleapis.com/overview">link</a>)</summary>
+  <summary>Step 1. Navigate to the Google Sheets entry in the API Library (<a href="https://console.cloud.google.com/apis/api/sheets.googleapis.com/overview">link &#x29C9;</a>)</summary>
   
   ![105 - Console - Library Menu](https://user-images.githubusercontent.com/1152104/83590751-4b9c9e00-a50b-11ea-97a5-f6c1836e550b.png)
   
@@ -403,13 +403,13 @@ The Google Sheets API is disabled by default in Google Cloud Projects so you mus
 
 #### 1.C. Create a Service Account
 
-[Google Cloud > Security & Identity Products > Service Accounts](https://cloud.google.com/iam/docs/service-accounts)
+[Google Cloud > Security & Identity Products > Service Accounts &#x29C9;](https://cloud.google.com/iam/docs/service-accounts)
 
 > A service account is a special kind of account used by an application or a virtual machine (VM) instance, not a person. Applications use service accounts to make authorized API calls.
 
 Bedsheets uses a Service Account to perform it's operations. This service account is identified by an email address in the form `ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com`. You can grant it access to specific Google Sheets by sharing the sheeet with it (using its email).
 
-For security, the Service Account will only be granted the ["Service Account User"](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) role, which only allows the Service Account to perform standard user operations (such as editing a Google Sheet it was invited to).
+For security, the Service Account will only be granted the ["Service Account User" &#x29C9;](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) role, which only allows the Service Account to perform standard user operations (such as editing a Google Sheet it was invited to).
 
 <details>
   <summary>Step 1. Create a new Service Account (<a href="https://console.developers.google.com/iam-admin/serviceaccounts/create">link</a>)</summary>
@@ -443,7 +443,7 @@ Bedsheets has been packaged as a Docker image for easy deployment (see [docker](
 
 #### Google Cloud Run _(Preferred)_
 
-Follow the instructions at [Google Cloud Run: Pre-Built Deploys](https://cloud.google.com/run/docs/quickstarts/prebuilt-deploy) and use the following parameters:
+Follow the instructions at [Google Cloud Run: Pre-Built Deploys &#x29C9;](https://cloud.google.com/run/docs/quickstarts/prebuilt-deploy) and use the following parameters:
 
 <details>
   <summary><em>expand to see parameters</em></summary>
@@ -509,7 +509,7 @@ Google Sheets API credentials (ie. the credentials for the Service Account) can 
 
 #### Docker
 
-Bedsheets is available as a Docker image on Docker Hub ([entry](https://hub.docker.com/repository/docker/bedsheets/rest-server)) under the label `bedsheets/rest-server`. Master is auto-built and tagged as `latest`, and git tags are also built and pushed.
+Bedsheets is available as a Docker image on Docker Hub ([entry &#x29C9;](https://hub.docker.com/repository/docker/bedsheets/rest-server)) under the label `bedsheets/rest-server`. Master is auto-built and tagged as `latest`, and git tags are also built and pushed.
 
 To run Bedsheets locally, use:
 
@@ -521,22 +521,22 @@ docker run -e GOOGLE_AUTH_CLIENT_EMAIL=$SA_EMAIL GOOGLE_AUTH_PRIVATE_KEY=$SA_PRI
 
 ### Terminology
 
-| Bedsheets       | Postgres                                                                                  | Description                                |
-| --------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Spreadsheet ID  | [Database Name / dbname](https://www.postgresql.org/docs/9.2/libpq-connect.html#AEN38680) | The instance/server being accessed         |
-| Sheet           | Table                                                                                     | The model/entity being retrieved           |
-| Editor/Viewer   | Read/Write access                                                                         | The user's data permissions                |
-| Service Account | User                                                                                      | The user/credentials used to access the DB |
+| Bedsheets       | Postgres                                                                                           | Description                                |
+| --------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Spreadsheet ID  | [Database Name / dbname &#x29C9;](https://www.postgresql.org/docs/9.2/libpq-connect.html#AEN38680) | The instance/server being accessed         |
+| Sheet           | Table                                                                                              | The model/entity being retrieved           |
+| Editor/Viewer   | Read/Write access                                                                                  | The user's data permissions                |
+| Service Account | User                                                                                               | The user/credentials used to access the DB |
 
 ## FAQ
 
 ### What's a _Spreadsheet ID_ or _A1 Notation_?
 
-See Google's [Sheet API Concepts](https://developers.google.com/sheets/api/guides/concepts) for an overview of these Google Sheets (and, in the case of _A1 Notation_, general spreadsheet) concepts.
+See Google's [Sheet API Concepts &#x29C9;](https://developers.google.com/sheets/api/guides/concepts) for an overview of these Google Sheets (and, in the case of _A1 Notation_, general spreadsheet) concepts.
 
 ### How are dates stored in Google Sheets?
 
-See Google's [Sheet API Concepts: Date & Time](https://developers.google.com/sheets/api/guides/concepts#datetime_serial_numbers) section for an overview of how spreadsheets store date & time.
+See Google's [Sheet API Concepts: Date & Time &#x29C9;](https://developers.google.com/sheets/api/guides/concepts#datetime_serial_numbers) section for an overview of how spreadsheets store date & time.
 
 ### Why am I getting a 403 error when trying to access my sheet?
 
@@ -548,11 +548,11 @@ There are several trouble-shooting steps to work through:
 
 ### How much data can I fit in a Google Sheet?
 
-According to [GSuiteTips](https://gsuitetips.com/tips/sheets/google-spreadsheet-limitations/) and [SpreadSheetPoint](https://spreadsheetpoint.com/google-sheets-limitations/), Google Sheets supports a maximum of 5 million cells per spreadsheet, up to 200 tabs, and up to 18,278 columns. A default Sheet will have 26 columns while most use cases only need <10, so it might be possible to extend the number of rows you can have by deleting any empty columns (# rows = # max cells / # columns). I haven't tested these limits yet (TODO test these limits!). Apparently, an update can only add 40,000 new rows at a time as well.
+According to [GSuiteTips &#x29C9;](https://gsuitetips.com/tips/sheets/google-spreadsheet-limitations/) and [SpreadSheetPoint &#x29C9;](https://spreadsheetpoint.com/google-sheets-limitations/), Google Sheets supports a maximum of 5 million cells per spreadsheet, up to 200 tabs, and up to 18,278 columns. A default Sheet will have 26 columns while most use cases only need <10, so it might be possible to extend the number of rows you can have by deleting any empty columns (# rows = # max cells / # columns). I haven't tested these limits yet (TODO test these limits!). Apparently, an update can only add 40,000 new rows at a time as well.
 
 ### How many requests can I make per second?
 
-The Google Sheets API quota will be the bottleneck when trying to make many requests. By default, the Google Sheets API permits [100 requests per 100 seconds](https://developers.google.com/sheets/api/limits) per service account, with reads and writes tracked separately. This may be increasable to 500 requests per 100 seconds by submitting a support request (see [this stackoverflow answer](https://stackoverflow.com/questions/45225734/how-to-increase-google-sheets-v4-api-quota-limitations/48204596#48204596)).
+The Google Sheets API quota will be the bottleneck when trying to make many requests. By default, the Google Sheets API permits [100 requests per 100 seconds &#x29C9;](https://developers.google.com/sheets/api/limits) per service account, with reads and writes tracked separately. This may be increasable to 500 requests per 100 seconds by submitting a support request (see [this stackoverflow answer &#x29C9;](https://stackoverflow.com/questions/45225734/how-to-increase-google-sheets-v4-api-quota-limitations/48204596#48204596)).
 
 ## v1.0 Blockers
 
@@ -561,14 +561,14 @@ _The following items are currently considered blockers before a v1.0 release wil
 1. Support for `PUT` (ie. update) operations.
 2. Support for `DELETE` operations.
 3. An adapter enabling FaaS deployments (eg. AWS Lambda, Google Cloud Functions).
-4. Robust validation of input (consider [io-ts](https://github.com/gcanti/io-ts/blob/master/index.md)).
+4. Robust validation of input (consider [io-ts &#x29C9;](https://github.com/gcanti/io-ts/blob/master/index.md)).
 5. Standardized, friendly errors for invalid inputs.
 6. Determine if basic authentication should be added (a per-deployment secret key? per-spreadsheet?).
 7. Consider adding a GraphQL abstraction in addition to REST.
 
 ## Suggested Alternatives
 
-See [awesome-serverless's list of databases](https://github.com/anaibol/awesome-serverless#databases) for a more extensive list of low-maintenance DBs.
+See [awesome-serverless's list of databases &#x29C9;](https://github.com/anaibol/awesome-serverless#databases) for a more extensive list of low-maintenance DBs.
 
 ## Contributing
 
