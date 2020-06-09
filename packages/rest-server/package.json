@@ -1,6 +1,6 @@
 {
   "name": "@bedsheets/rest-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Turn Google Sheets into a quick & dirty RESTful DB",
   "repository": "github.com/awendland/bedsheets",
   "author": "Alex Wendland <me@alexwendland.com>",
@@ -18,7 +18,7 @@
     "build:watch": "tsc --watch"
   },
   "dependencies": {
-    "@bedsheets/google-sheets-dal": "^0.1.0",
+    "@bedsheets/google-sheets-dal": "^0.2.0",
     "@types/node": "10.14.2"
   },
   "devDependencies": {

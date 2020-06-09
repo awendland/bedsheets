@@ -1,6 +1,6 @@
 {
   "name": "@bedsheets/google-sheets-dal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Data access layer on top of the Google Sheets v4 API",
   "repository": "github.com/awendland/bedsheets",
   "author": "Alex Wendland <me@alexwendland.com>",
