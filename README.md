@@ -8,17 +8,23 @@
 - **no-maintenance**, so that you can deploy it once and forget about things
 - **self-hosted**, so that you don't have to risk unreliable or insecure 3rd-party services (plus, you can usually host it for free on most cloud providers!)
 
-<img height="18px" src="https://user-images.githubusercontent.com/1152104/83938433-fa99dd80-a788-11ea-9988-47f4e9caf288.png" /> Google Sheets provides several great database features: [built-in version control &#x29C9;](https://support.google.com/docs/answer/190843), [collaborative management &#x29C9;](https://support.google.com/docs/answer/9331169), [a great table browser &#x29C9;](https://itnext.io/using-google-sheets-as-a-database-for-react-apps-6c15b4481680) (it is a spreadsheets after all), [powerful data processing functions &#x29C9;](https://support.google.com/docs/answer/9330962), and [simple visualization tools &#x29C9;](https://developers.google.com/chart/interactive/docs/spreadsheets). By following simple conventions, Bedsheets lets you introduce table schemas [see docs](#sheet-schema) and expose them over HTTP(S) with REST endpoints and JSON payloads.
+<img height="18px" src="https://user-images.githubusercontent.com/1152104/83938433-fa99dd80-a788-11ea-9988-47f4e9caf288.png" /> Google Sheets provides several great database features: [built-in version control &#x29C9;](https://support.google.com/docs/answer/190843), [collaborative management &#x29C9;](https://support.google.com/docs/answer/9331169), [a great table browser &#x29C9;](https://itnext.io/using-google-sheets-as-a-database-for-react-apps-6c15b4481680), [powerful data processing functions &#x29C9;](https://support.google.com/docs/answer/9330962), and [basic visualization tools &#x29C9;](https://developers.google.com/chart/interactive/docs/spreadsheets). By following simple conventions Bedsheets lets you introduce table schemas [see docs](#sheet-schema) and expose them over HTTP(S) with REST endpoints and JSON payloads.
 
-Bedsheets is not trying to compete with real databases. Instead, it's trying to provide a database with a lower barrier to entry for those projects that you think _"wow, it would be nice if this had a database, but I don't want to go through the hassle of deploying/configuring/maintaining the infrastructure for one"_. For example, [@awendland](https://github.com/awendland) uses it to store temperature data recorded by a Raspberry Pi.
+Bedsheets is not trying to compete with real databases. Instead, it's trying to provide a database with a lower barrier to entry for small projects that you think _"wow, it would be nice if this had a database, but I don't want to go through the hassle of deploying/configuring/maintaining the infrastructure for one"_. For example, [@awendland](https://github.com/awendland) uses it to store temperature data recorded by a Raspberry Pi.
 
 ## Demo
 
 ![Screen-recording showing a browser open to a Google Sheet on the left and a terminal open on the right. A curl command is entered into the terminal to perform a GET operation, which returns the data from the Google Sheet in a JSON format. A second curl command is run to POST new data to the sheet, and the Google Sheet on the left updates in real time. A third curl command is run to GET the Google Sheet's data, which includes the newly added data. Then, the Google Sheet is edited to change a column labeled "name" to now be "first_name". The GET curl command is run again, and this time the JSON payload is keyed with "first_name" instead of "name".](https://user-images.githubusercontent.com/1152104/83918258-356e2800-a72d-11ea-8e26-43e7970e0509.gif)
 
-TODO: create a demo deployment and document it here.
+The latest version of Bedsheets is auto-deployed to [https://demo-1-3gkwpsop5a-uc.a.run.app](https://demo-1-3gkwpsop5a-uc.a.run.app). A demo spreadsheet [1ajoVZn1zhg3HCF4cRpIZOBFRkNWsfXUC9rwVX_YQ70U](https://docs.google.com/spreadsheets/d/1ajoVZn1zhg3HCF4cRpIZOBFRkNWsfXUC9rwVX_YQ70U/edit?usp=sharing) is configured with a sample schema (it'll reset every 20 minutes).
 
-TODO: make a publicly-editable spreadsheet that resets every 15 minutes using Github actions.
+Take a look at the spreadsheet and then run the following command (or [view in ReqBin](https://reqbin.com/wpm4mwe6)) to see Bedsheets in action:
+
+```sh
+curl -X GET "https://demo-1-3gkwpsop5a-uc.a.run.app/1ajoVZn1zhg3HCF4cRpIZOBFRkNWsfXUC9rwVX_YQ70U/Playground"
+```
+
+The spreadsheet is publicly editable, so feel free to modify it and test out how the schema system works!
 
 ## Table of Contents
 
@@ -403,13 +409,13 @@ The Google Sheets API is disabled by default in Google Cloud Projects so you mus
 
 #### 1.C. Create a Service Account
 
-[Google Cloud > Security & Identity Products > Service Accounts &#x29C9;](https://cloud.google.com/iam/docs/service-accounts)
+As described by [Google Cloud > Security & Identity Products > Service Accounts &#x29C9;](https://cloud.google.com/iam/docs/service-accounts):
 
 > A service account is a special kind of account used by an application or a virtual machine (VM) instance, not a person. Applications use service accounts to make authorized API calls.
 
-Bedsheets uses a Service Account to perform it's operations. This service account is identified by an email address in the form `ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com`. You can grant it access to specific Google Sheets by sharing the sheeet with it (using its email).
+Bedsheets uses a Service Account to perform it's operations. This service account is identified by an email address in the form `ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com`. You can grant it access to specific spreadsheets by inviting it via its email.
 
-For security, the Service Account will only be granted the ["Service Account User" &#x29C9;](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) role, which only allows the Service Account to perform standard user operations (such as editing a Google Sheet it was invited to).
+For security, the Service Account will be granted the ["Service Account User" &#x29C9;](https://cloud.google.com/iam/docs/understanding-roles#service-accounts-roles) role, which only allows the Service Account to perform standard user operations (such as editing a Google Sheet it was invited to).
 
 <details>
   <summary>Step 1. Create a new Service Account (<a href="https://console.developers.google.com/iam-admin/serviceaccounts/create">link</a>)</summary>
@@ -435,7 +441,7 @@ For security, the Service Account will only be granted the ["Service Account Use
   ![207 - Console - Create Service Account - Key - Json](https://user-images.githubusercontent.com/1152104/83590765-4e978e80-a50b-11ea-9328-cb35c8af5abb.png)
 </details>
 
-_If you are using Google Cloud Run or Cloud Functions then you can skip the credentials step and instead assign the Service Account directly to the execution environment which Bedsheets will automatically adopt (see the section on Cloud Providers for more information)._
+_If you are using Google Cloud Run or Cloud Functions then you can skip the credentials download step and instead assign the Service Account directly to the execution environment which Bedsheets will automatically adopt (see the section on Cloud Providers for more information)._
 
 ### 2. Deploy to a Cloud Provider
 
