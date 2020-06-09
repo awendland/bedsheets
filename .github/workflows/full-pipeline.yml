@@ -107,6 +107,9 @@ jobs:
         with:
           path: .
           dockerfile: docker/rest-server/Dockerfile
+          # TODO manually set tag b/c monorepo release tagging doesn't work (the tags are
+          # set as 'refs/tags/@bedsheets-rest-server@0.2.0' which needs to be converted into
+          # just '0.2.0' for the image tag)
           tag_with_ref: true # refs/head/master will be turned into "latest"
           # add_git_labels: true
           always_pull: true
