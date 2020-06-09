@@ -142,6 +142,20 @@ test("generic REST server - GET /Sheet1, 1 object w/ offset + limit", async () =
   })
 }
 
+test("generic REST server - CORS w/ pre-flight", async () => {
+  const origin = "https://graphemica.com"
+  await request(context.server)
+    .options(`/${context.spreadsheetId}/${TEST_SHEETS.Sheet1.title}`)
+    .set("Origin", origin)
+    .expect(204)
+    .expect("Access-Control-Allow-Origin", origin)
+  await request(context.server)
+    .get(`/${context.spreadsheetId}/${TEST_SHEETS.Sheet1.title}/describe`)
+    .set("Origin", origin)
+    .expect(200)
+    .expect("Access-Control-Allow-Origin", origin)
+})
+
 ////////////
 // Errors //
 ////////////

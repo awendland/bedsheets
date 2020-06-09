@@ -47,6 +47,7 @@ The spreadsheet is publicly editable, so feel free to modify it and test out how
       - [Too Many Requests (429)](#too-many-requests-429)
       - [Bad Data (400)](#bad-data-400)
       - [Unknown (400)](#unknown-400)
+    - [CORS](#cors)
   - [Sheets Configuration](#sheets-configuration)
     - [Sheet Schema](#sheet-schema)
     - [Manage Access](#manage-access)
@@ -336,6 +337,12 @@ Returned when the request payload doesn't match the sheet schema.
 ##### Unknown (400)
 
 Any other errors thrown by the underlying `googleapis` interface will be logged to `stderr` and will either return the original status code or `400` if no status code was present. They will include the original error `message` in the response payload to assist with immediate debugging without exposing too much sensitive information.
+
+#### CORS
+
+The server will respond to requests with an `Origin` header by reflecting the value back in `Access-Control-Allow-Origin`. It will similarly reflect values for `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers`. `OPTIONS` requests will be returned with `204` status codes, unless they request invalid URLs (in which case they will be handled like normal).
+
+This should enable browser-based access to Bedsheet's APIs. To disable CORS support pass `DISABLE_CORS=true` as an environment variable.
 
 ### Sheets Configuration
 

@@ -15,6 +15,7 @@
     "build:all:watch": "lerna run --parallel build:watch",
     "scripts:run": "ts-node-script --transpile-only",
     "scripts:check": "tsc --noEmit ./scripts/*.ts",
+    "test:name-match": "jest --runInBand --testNamePattern",
     "test:all": "yarn test:unit && yarn test:integration",
     "test:all:ci": "yarn test:unit:ci && yarn test:integration:ci",
     "test:unit": "jest --testPathPattern='/unit'",

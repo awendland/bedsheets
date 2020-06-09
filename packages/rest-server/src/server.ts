@@ -1,4 +1,4 @@
-import http from "http"
+import http, { IncomingMessage } from "http"
 import * as util from "util"
 import { sheets_v4 } from "googleapis"
 import * as SheetsDAL from "@bedsheets/google-sheets-dal"
@@ -30,10 +30,12 @@ export async function runServer({
   const server = http.createServer(async (request, response) => {
     // Tag each request so that log messages are easier to follow
     const taggedRequest = TagIncomingMessage(request)
+    Log.trace(`[${taggedRequest.id}]headers=%j`, request.headers)
     try {
       const parsedReq = {
         ...(await parseRequestUrl(taggedRequest)),
         ...(await parseRequestBody(taggedRequest, maxRequestSize)),
+        method: request.method,
       }
       await router.route([request.method, parsedReq.virtualResource], {
         request: taggedRequest,
@@ -54,10 +56,13 @@ export async function runServer({
           )
           Log.traceIf(() => [`[${taggedRequest.id}]response-trace=%j`, e])
         } else Log.info(`[${taggedRequest.id}]response=%j`, e)
-        response.writeHead(e.statusCode, {
+        const headers = {
           "Content-Type": "application/json",
+          ...(process.env.DISABLE_CORS == "true" ? {} : corsHeaders(request)),
           ...(e.headers ?? {}),
-        })
+        }
+        Log.trace(`[${taggedRequest.id}]response-headers=%j`, headers)
+        response.writeHead(e.statusCode, headers)
         response.end(payload, "utf-8")
         return
       }
@@ -97,9 +102,12 @@ function setupRouter(sheetsApi: sheets_v4.Sheets) {
       request: TaggedIncomingMessage
       parsedReq: ParsedRequest
     }
-  >(() => {
+  >(({ request }) => {
+    // TODO improve router to move OPTIONS out of the default handler and into
+    // its own route (this is to enable CORS pre-flight requests)
+    if (request.method === "OPTIONS") throw new HttpResponse(204)
     throw new HttpResponse(405, {
-      message: `Only {GET, POST} requests methods are supported`,
+      message: `Only {GET, POST, OPTIONS} requests methods are supported`,
     })
   })
     .error(({ error: e, request }) => {
@@ -164,7 +172,7 @@ type ParsedUrlInfo = {
 }
 
 function parseRequestUrl(request: TaggedIncomingMessage): ParsedUrlInfo {
-  Log.trace(`[${request.id}]url=%s`, request.url)
+  Log.trace(`[${request.id}]url=%s %s`, request.method, request.url)
   const url = new URL(request.url!, `http://${request.headers.host}`) // TODO when can the URL be undefined?
   const rawPathInfo = PATH_REGEX.exec(url.pathname)?.groups
   Log.trace(`[${request.id}]parsed-url=%j`, url)
@@ -199,4 +207,31 @@ async function parseRequestBody(
   const body = await readRequestBody(request, { maxRequestSize })
   Log.traceIf(async () => [`[${request.id}]body=%s`, await body?.asString()])
   return { body: await body?.asJson() }
+}
+
+function echoHeader(
+  request: IncomingMessage,
+  header: string,
+  newHeader: string = header
+) {
+  const value = request.headers[header]
+  if (value) return { [newHeader]: value }
+  return {}
+}
+
+function corsHeaders(request: IncomingMessage) {
+  return {
+    ...echoHeader(request, "origin", "access-control-allow-origin"),
+    ...echoHeader(
+      request,
+      "access-control-request-headers",
+      "access-control-allow-headers"
+    ),
+    ...echoHeader(
+      request,
+      "access-control-request-method",
+      "access-control-allow-method"
+    ),
+    "access-control-max-age": Number.MAX_SAFE_INTEGER,
+  }
 }
