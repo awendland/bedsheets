@@ -19,7 +19,15 @@
   },
   "dependencies": {
     "@bedsheets/google-sheets-dal": "^0.2.0",
-    "@types/node": "10.14.2"
+    "@tinyhttp/app": "0.5.2",
+    "@tinyhttp/cors": "0.5.0",
+    "@types/node": "10.14.2",
+    "@types/polka": "0.5.1",
+    "fp-ts": "2.8.4",
+    "hyper-ts": "0.6.0",
+    "io-ts": "2.2.11",
+    "milliparsec": "1.0.4",
+    "polka": "0.5.2"
   },
   "devDependencies": {
     "@bedsheets/test-helpers": "^0.1.0",
