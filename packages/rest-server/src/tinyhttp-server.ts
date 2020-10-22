@@ -1,5 +1,6 @@
 import * as util from "util"
 import { App, Request, Response } from "@tinyhttp/app"
+import * as TF from "type-fest"
 import { SyncHandler } from "@tinyhttp/router"
 import { json as parseBodyAsJson } from "milliparsec"
 import * as D from "io-ts/lib/Decoder"
@@ -37,6 +38,25 @@ export async function runServer({
 
   server.use(parseBodyAsJson())
 
+  class RouteParam<ID extends string> {
+    constructor(public id: ID) {}
+  }
+  type ParamaterizedRoute = ReadonlyArray<string | RouteParam<string>>
+  type OnlyRouteParams<T extends ParamaterizedRoute> = Exclude<T[number], string>
+  type RouteParamsDictionary<T extends ParamaterizedRoute> = Record<OnlyRouteParams<T>['id'], string>
+
+  const addTypedRouteTo = (server: App) => <T extends ParamaterizedRoute>(method: string, urlComponents: [...T], handler: (req: any, res: any, params: RouteParamsDictionary<T>) => any) => {
+    const path = urlComponents.map(c => c instanceof RouteParam ? `:${c.id}` : c).join("")
+    server['get'](path, (req, res, next) => handler(req, res, req.params as any))
+  }
+  const addTypedRoute = addTypedRouteTo(server)
+
+  const a = ["/", new RouteParam("spreadsheetId"), "/", new RouteParam("sheetName")]
+  type A = Exclude<(typeof a)[number], string>['id']
+
+  addTypedRoute("get", ["/", new RouteParam("spreadsheetId"), "/", new RouteParam("sheetName")], (req, res, params) => {
+    params
+  })
 
   // TODO write a function that handles errors thrown by sheetsAPI
   //    throw new HttpResponse(e.httpStatusCode, e.redactedInfo)

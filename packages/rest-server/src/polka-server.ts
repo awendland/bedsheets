@@ -45,9 +45,12 @@ export async function runServer({
     return (args: Parameters<F>) => f(...args)
   }
 
+  const add = (a: number, b: number) => a + b
+  const unaryAdd = makeUnary(add)
+
   const f =
     flow(
-      ([req, res, next]) => decodeParamsAs(D.type({ offset: D.number, limit: D.number }))(req, res, next),
+      makeUnary(decodeParamsAs(D.type({ offset: D.number, limit: D.number }))),
       (t) => void t,
       ([req, res, next]) => {
         const { offset, limit } = req.params
