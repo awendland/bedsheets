@@ -27,12 +27,10 @@ export async function runServer({
 
   const server = new App({
     noMatchHandler: (_req, res) => {
-      res
-        .status(404)
-        .end({
-          error: `Not found`,
-          hint: `Try sending a GET request to '/$SPREADSHEET_ID/$SHEET_NAME/describe' to see the schema for a given sheet`,
-        })
+      res.status(404).end({
+        error: `Not found`,
+        hint: `Try sending a GET request to '/$SPREADSHEET_ID/$SHEET_NAME/describe' to see the schema for a given sheet`,
+      })
     },
   })
 
@@ -42,31 +40,69 @@ export async function runServer({
     constructor(public id: ID) {}
   }
   type ParamaterizedRoute = ReadonlyArray<string | RouteParam<string>>
-  type OnlyRouteParams<T extends ParamaterizedRoute> = Exclude<T[number], string>
-  type RouteParamsDictionary<T extends ParamaterizedRoute> = Record<OnlyRouteParams<T>['id'], string>
+  type OnlyRouteParams<T extends ParamaterizedRoute> = Exclude<
+    T[number],
+    string
+  >
+  type RouteParamsDictionary<T extends ParamaterizedRoute> = Record<
+    OnlyRouteParams<T>["id"],
+    string
+  >
 
-  const addTypedRouteTo = (server: App) => <T extends ParamaterizedRoute>(method: string, urlComponents: [...T], handler: (req: any, res: any, params: RouteParamsDictionary<T>) => any) => {
-    const path = urlComponents.map(c => c instanceof RouteParam ? `:${c.id}` : c).join("")
-    server['get'](path, (req, res, next) => handler(req, res, req.params as any))
+  type AppMethods = keyof TF.ConditionalPick<
+    App,
+    (...args: Parameters<App["get"]>) => ReturnType<App["get"]>
+  >
+
+  const addTypedRouteTo = <HandlerFunc extends (...args: any[]) => any>(server: App) => <T extends ParamaterizedRoute>(
+    method: AppMethods,
+    urlComponents: T,
+    handler: (
+      req: Parameters<HandlerFunc>[0] & {
+        params: RouteParamsDictionary<T>
+      },
+      res: Parameters<HandlerFunc>[1]
+    ) => ReturnType<HandlerFunc>
+  ) => {
+    const path = urlComponents
+      .map((c) => (c instanceof RouteParam ? `:${c.id}` : c))
+      .join("")
+    server[method](path, (req, res, next) => handler(req as any, res))
   }
-  const addTypedRoute = addTypedRouteTo(server)
+  const addTypedRoute = addTypedRouteTo<App['noMatchHandler']>(server)
 
-  const a = ["/", new RouteParam("spreadsheetId"), "/", new RouteParam("sheetName")]
-  type A = Exclude<(typeof a)[number], string>['id']
+  const a = [
+    "/",
+    new RouteParam("spreadsheetId"),
+    "/",
+    new RouteParam("sheetName"),
+  ]
+  type A = Exclude<typeof a[number], string>["id"]
 
-  addTypedRoute("get", ["/", new RouteParam("spreadsheetId"), "/", new RouteParam("sheetName")], (req, res, params) => {
-    params
-  })
+  addTypedRoute(
+    "get",
+    ["/", new RouteParam("spreadsheetId"), "/", new RouteParam("sheetName")],
+    (req, res) => {
+      req.params
+    }
+  )
 
   // TODO write a function that handles errors thrown by sheetsAPI
   //    throw new HttpResponse(e.httpStatusCode, e.redactedInfo)
 
   server.get("/:spreadsheetId/:sheetName", async (req, res) => {
-    const { spreadsheetId, sheetName } = req.params as {spreadsheetId: string, sheetName: string}
+    const { spreadsheetId, sheetName } = req.params as {
+      spreadsheetId: string
+      sheetName: string
+    }
 
-    const maybeQuery = D.partial({offset: D.number, limit: D.number}).decode(req.query)
+    const maybeQuery = D.partial({ offset: D.number, limit: D.number }).decode(
+      req.query
+    )
     if (isLeft(maybeQuery))
-      return void res.status(400).send({ status: "error", message: D.draw(maybeQuery.left) })
+      return void res
+        .status(400)
+        .send({ status: "error", message: D.draw(maybeQuery.left) })
     const { offset, limit } = maybeQuery.right
 
     const payload = await SheetsDAL.get(sheetsApi, {
@@ -76,20 +112,31 @@ export async function runServer({
       limit,
     })
     return void res.status(200).send(payload)
-  }))
+  })
 
   server.post("/:spreadsheetId/:sheetName", async (req, res) => {
-    const { spreadsheetId, sheetName } = req.params as {spreadsheetId: string, sheetName: string}
+    const { spreadsheetId, sheetName } = req.params as {
+      spreadsheetId: string
+      sheetName: string
+    }
 
-    const maybeQuery = D.partial({strict: D.boolean}).decode(req.query)
+    const maybeQuery = D.partial({ strict: D.boolean }).decode(req.query)
     if (isLeft(maybeQuery))
-      return void res.status(400).send({ status: "error", message: D.draw(maybeQuery.left) })
+      return void res
+        .status(400)
+        .send({ status: "error", message: D.draw(maybeQuery.left) })
     const { strict } = maybeQuery.right
 
-    const maybeBody = D.union(D.UnknownRecord, D.array(D.UnknownRecord)).decode(req.query)
+    const maybeBody = D.union(D.UnknownRecord, D.array(D.UnknownRecord)).decode(
+      req.query
+    )
     if (isLeft(maybeBody))
-      return void res.status(400).send({ status: "error", message: D.draw(maybeBody.left) })
-    const data = Array.isArray(maybeBody.right) ? maybeBody.right : [maybeBody.right]
+      return void res
+        .status(400)
+        .send({ status: "error", message: D.draw(maybeBody.left) })
+    const data = Array.isArray(maybeBody.right)
+      ? maybeBody.right
+      : [maybeBody.right]
 
     const payload = await SheetsDAL.append(sheetsApi, {
       spreadsheetId,
